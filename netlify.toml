@@ -1,0 +1,19 @@
+# Netlify builds the site from this repository on every push to main.
+#
+# The single-page rewrite lives in public/_redirects and is copied into the
+# build, so nothing about routing needs saying here.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# The service worker must never be served stale: a cached old worker keeps
+# controlling the page long after a deploy, and this one is what signs the
+# stream requests.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
