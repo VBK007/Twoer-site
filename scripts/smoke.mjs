@@ -69,7 +69,9 @@ console.log('  title:', await page.locator('.detail h1').innerText().catch(() =>
 await shot('08-anon-detail')
 
 console.log('\n▸ Press Play — this is where an account should be asked for')
-await page.getByRole('link', { name: /^(Play|Resume)$/ }).click()
+// A track's Play is a button (it plays in the bar); a film's is a link to /watch.
+// Either way an anonymous visitor lands on sign-in.
+await page.getByRole('button', { name: /^(Play|Resume)$/ }).or(page.getByRole('link', { name: /^(Play|Resume)$/ })).first().click()
 await page.waitForTimeout(2500)
 console.log('  landed on:', new URL(page.url()).pathname)
 console.log('  heading:', await page.locator('.pane-card h1').innerText().catch(() => '—'))
